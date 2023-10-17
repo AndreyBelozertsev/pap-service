@@ -72,13 +72,7 @@ class BotWebhookHandler extends WebhookHandler
                  \nЗдесь будет ваш произвольный текст: 
                  \nТекст может быть на несколько строк!!! 
             ")
-            ->keyboard(function(Keyboard $keyboard){
-                return $keyboard
-                    ->row([
-                        Button::make('Оплатить')->action('pay'),
-                        Button::make('Окончание подписки')->action('expire'),
-                    ]);
-            })->send();
+            ->send();
     
         $this->nextAction();
     }

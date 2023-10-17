@@ -2,6 +2,7 @@
 namespace App\Routing;
 
 use Exception;
+use Illuminate\Http\Request;
 use App\Contracts\RouteRegistrar;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -16,6 +17,9 @@ class AppRegistrar implements RouteRegistrar
             Route::get('/', [HomeController::class, 'index'])->name('home'); 
         });
 
+        Route::get('/amo/token', function (Request $request) {
+            Log::debug($request);
+        }); 
 
     }
 }
