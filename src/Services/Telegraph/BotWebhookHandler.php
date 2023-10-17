@@ -94,10 +94,13 @@ class BotWebhookHandler extends WebhookHandler
 
     public function success(): void
     {
-        $this->chat->message('Оплата прошла успешно')
+        $this->chat->html("
+            Спасибо за регистрацию
+            \n Отправляем Вам приглашение на закрытый канал, заявки принмаются автоматически!
+        ")
             ->keyboard(function(Keyboard $keyboard){
                 return $keyboard
-                    ->button('Перейти в канал')->url('https://ya.ru');
+                    ->button('Перейти в канал')->url('https://t.me/+Ybl8epmC-qZiZDgy');
             })
             ->send();
     }

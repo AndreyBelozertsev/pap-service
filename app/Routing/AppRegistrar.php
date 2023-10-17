@@ -4,6 +4,7 @@ namespace App\Routing;
 use Exception;
 use Illuminate\Http\Request;
 use App\Contracts\RouteRegistrar;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use Illuminate\Contracts\Routing\Registrar;
