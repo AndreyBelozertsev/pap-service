@@ -36,6 +36,7 @@ class BotWebhookHandler extends WebhookHandler
 
     public function handle(Request $request, \DefStudio\Telegraph\Models\TelegraphBot $bot): void
     {
+        Log::debug($request);
         parent::handle($request, $bot);
 
         if ($this->request->has('chat_join_request')) {
@@ -83,53 +84,6 @@ class BotWebhookHandler extends WebhookHandler
     }
 
 
-    public function pay(): void
-    {
-        $this->chat->message('Выберите тариф:')
-            ->keyboard(function(Keyboard $keyboard){
-                return $keyboard
-                    ->button('30 дней')->action('tarif1')
-                    ->button('90 дней')->action('tarif2')
-                    ->button('180 дней')->action('tarif3')
-                    ->button('Тест')->action('testHook');
-            })->send();
-    }
-
-    public function expire(): void
-    {
-        $this->chat->message('Ваша подписка оканчивается через хххх дней')->send();
-    }
-
-    public function tarif1(): void
-    {
-        $this->chat->message("Вы выбрали тарфиф на 30 дней. \nСсылка на оплату:")
-            ->keyboard(function(Keyboard $keyboard){
-                return $keyboard
-                    ->button('Оплатить')->url('https://ya.ru');
-            })
-            ->send();
-    }
-
-    public function tarif2(): void
-    {
-        $this->chat->message("Вы выбрали тарфиф на 90 дней. \nСсылка на оплату:")
-            ->keyboard(function(Keyboard $keyboard){
-                return $keyboard
-                    ->button('Оплатить')->url('https://ya.ru');
-            })
-            ->send();
-    }
-
-    public function tarif3(): void
-    {
-
-        $this->chat->message("Вы выбрали тарфиф на 180 дней. \nСсылка на оплату:")
-            ->keyboard(function(Keyboard $keyboard){
-                return $keyboard
-                    ->button('Оплатить')->url('https://ya.ru');
-            })
-            ->send();
-    }
 
     public function testHook(): void
     {
