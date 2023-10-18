@@ -18,7 +18,7 @@ class AppRegistrar implements RouteRegistrar
             Route::get('/', [HomeController::class, 'index'])->name('home'); 
         });
 
-        Route::get('/amo/token', function (Request $request) {
+        Route::match(['get', 'post'],'/amo/token', function (Request $request) {
             Log::debug($request);
         }); 
 
