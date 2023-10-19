@@ -32,7 +32,7 @@ class AmoCrmServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('amocrm', fn (Container $app) => new AmoCrmManager($app['config']));
+        $this->app->singleton('amocrm', fn (Container $app) => new AmoCrmManager($app['config']['amocrm']));
     }
 
     /**

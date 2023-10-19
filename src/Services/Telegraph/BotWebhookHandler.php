@@ -15,6 +15,7 @@ use DefStudio\Telegraph\DTO\CallbackQuery;
 use DefStudio\Telegraph\Keyboard\Keyboard;
 use Services\Telegraph\Models\TelegraphChat;
 use DefStudio\Telegraph\Keyboard\ReplyButton;
+use Services\AmoCRM\WebHooks\NewTelegramUser;
 use DefStudio\Telegraph\Keyboard\ReplyKeyboard;
 use DefStudio\Telegraph\Handlers\WebhookHandler;
 use DefStudio\Telegraph\Exceptions\TelegramWebhookException;
@@ -51,15 +52,24 @@ class BotWebhookHandler extends WebhookHandler
     {
         $chat_id = $chatJoinQuery->chat()->id();
         $user_id = $chatJoinQuery->from()->id();
+        
+        $telegraphChat = TelegraphChat::with('client')->whereHas('client', function($q) use($user_id){
+                    $q->where('telegram_id', $user_id);
+                })->first();
+
+        if(!$telegraphChat || !($chat_id == config('constant.telegram_group_id'))){
+            return;
+        }
+
         TelegraphCustomFacade::approveChatJoin( $chat_id, $user_id )->send();
-
-        $telegraphChat = TelegraphChat::where('chat_id', '259548170')->first();
-
         $telegraphChat->html("Ваша заявка одобрена!"
         )->keyboard(function(Keyboard $keyboard) use($chatJoinQuery){
             return $keyboard
-                ->button('В канал')->url('https://t.me/+Ybl8epmC-qZiZDgy');
+                ->button('В канал')->url(config('constant.telegram_group_link'));
         })->send();
+        //do webHook to AmoCRM
+        $amocrmNewTelegramUserWebHook = new NewTelegramUser($telegraphChat->client);
+        $amocrmNewTelegramUserWebHook->index();
 
     }
     
@@ -81,14 +91,14 @@ class BotWebhookHandler extends WebhookHandler
 
     public function testHook(): void
     {
-        $telegraphChat = TelegraphChat::where('chat_id', '-1001570080663')->first();
+        $telegraphChat = TelegraphChat::where('chat_id', config('constant.telegram_group_id'))->first();
 
         // $link = $telegraphChat->createInviteLink()    
         //     ->withJoinRequest()      
         //     ->send();
         
 
-        $this->chat->message('https://t.me/+Ybl8epmC-qZiZDgy')
+        $this->chat->message(config('constant.telegram_group_link'))
             ->send();
     }
 
@@ -100,7 +110,7 @@ class BotWebhookHandler extends WebhookHandler
         ")
             ->keyboard(function(Keyboard $keyboard){
                 return $keyboard
-                    ->button('Перейти в канал')->url('https://t.me/+Ybl8epmC-qZiZDgy');
+                    ->button('Перейти в канал')->url(config('constant.telegram_group_link'));
             })
             ->send();
     }

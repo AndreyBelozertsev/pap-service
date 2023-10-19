@@ -1,23 +1,15 @@
 <?php
 
 
+
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Авторизация в системе amoCRM
-    |--------------------------------------------------------------------------
-    |
-    | Эти параметры необходимы для авторизации в системе amoCRM.
-    | - Поддомен компании. Приставка в домене перед .amocrm.ru;
-    | - Логин пользователя. В качестве логина в системе используется e-mail;
-    | - Ключ пользователя, который можно получить на странице редактирования
-    |   профиля пользователя.
-    |
-    */
-
-    'clientId' => env('AMO_CLIENT_ID'),
-    'clientSecret' => env('AMO_CLIENT_SECRET'),
-    'redirectUri' => env('AMO_REDIRECT_URI'),
+    'models' => [
+        'token' => Services\AmoCRM\Models\AmoCrmToken::class,
+    ],
+    'client_id' => env('AMO_CLIENT_ID'),
+    'base_domain' => env('AMO_BASE_DOMAIN'),
+    'client_secret' => env('AMO_CLIENT_SECRET'),
+    'redirect_uri' => env('AMO_REDERECT_URI')
 
 ];
