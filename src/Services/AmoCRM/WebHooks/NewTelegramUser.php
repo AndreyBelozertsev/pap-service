@@ -254,7 +254,10 @@ class NewTelegramUser
 
 
         foreach($leads as $lead){
-            if(! $lead->getTags()->getBy('name', config('constant.amo_crm_lead_tag_name'))){
+            if(!$lead->getTags()){
+                continue;
+            }
+            if(!$lead->getTags()->getBy('name', config('constant.amo_crm_lead_tag_name'))){
                 continue;
             }
             return $lead;
