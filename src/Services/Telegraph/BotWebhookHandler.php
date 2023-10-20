@@ -4,6 +4,7 @@ namespace Services\Telegraph;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Jobs\AmoSendClientInfo;
 use Domain\Client\Models\Client;
 use Illuminate\Support\Stringable;
 use Illuminate\Support\Facades\Log;
@@ -68,8 +69,7 @@ class BotWebhookHandler extends WebhookHandler
                 ->button('В канал')->url(config('constant.telegram_group_link'));
         })->send();
         //do webHook to AmoCRM
-        $amocrmNewTelegramUserWebHook = new NewTelegramUser($telegraphChat->client);
-        $amocrmNewTelegramUserWebHook->index();
+        AmoSendClientInfo::dispatch($telegraphChat->client);
 
     }
     

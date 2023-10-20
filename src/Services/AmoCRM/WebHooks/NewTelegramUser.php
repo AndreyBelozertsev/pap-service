@@ -38,9 +38,13 @@ class NewTelegramUser
     public function index()
     {
             $contact = $this->getContact();
+            if(!$contact){
+                return false;
+            }
             $this->updateContactInfo($contact);
             $lead = $this->getLead($contact);
             $this->leadStatusUpdate($lead);
+            return true;
 
     }
 

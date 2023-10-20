@@ -3,11 +3,13 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Domain\Client\Models\Client;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use Services\AmoCRM\WebHooks\NewTelegramUser;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 
 class AmoSendClientInfo implements ShouldQueue
 {
@@ -16,9 +18,9 @@ class AmoSendClientInfo implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct()
+    public function __construct(public Client $client)
     {
-        //
+
     }
 
     /**
@@ -26,6 +28,7 @@ class AmoSendClientInfo implements ShouldQueue
      */
     public function handle(): void
     {
-        //
+        $amocrmNewTelegramUserWebHook = new NewTelegramUser($this->client);
+        $amocrmNewTelegramUserWebHook->index();
     }
 }
