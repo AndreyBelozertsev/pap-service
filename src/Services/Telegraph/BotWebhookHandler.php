@@ -104,9 +104,8 @@ class BotWebhookHandler extends WebhookHandler
 
     public function success(): void
     {
-        $this->chat->html("
-            Спасибо за регистрацию
-            \n Отправляем Вам приглашение на закрытый канал, заявки принмаются автоматически!
+        $this->chat->html("Спасибо за регистрацию
+            \nОтправляем Вам приглашение на закрытый канал, заявки принмаются автоматически!
         ")
             ->keyboard(function(Keyboard $keyboard){
                 return $keyboard
