@@ -141,7 +141,7 @@ class BotWebhookHandler extends WebhookHandler
         $this->message->text();
         $validator = validator(
             ['email'=>$this->message->text()],
-            ['email'=>'required|email:rfc']
+            ['email'=>'required|email:rfc,dns']
         );
 
         if ($validator->fails()) {
