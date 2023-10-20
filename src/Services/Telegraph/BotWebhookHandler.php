@@ -167,7 +167,7 @@ class BotWebhookHandler extends WebhookHandler
         $this->message->text();
         $validator = validator(
             ['phone'=>$phone],
-            ['phone'=> 'required|digits_between:10,12']
+            ['phone'=> 'required|digits_between:11,13']
         );
 
         if ($validator->fails()) {
