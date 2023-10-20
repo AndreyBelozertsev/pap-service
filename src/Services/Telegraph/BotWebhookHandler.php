@@ -183,7 +183,7 @@ class BotWebhookHandler extends WebhookHandler
 
     public function getClientPhone(): void
     {
-        $this->chat->message("Введите ваш телефон:")->forceReply(placeholder: 'setClientPhone')->send();
+        $this->chat->message("Введите ваш телефон:")->forceReply(placeholder: 'Введите номер телефона')->send();
     }
 
     public function nextAction(): void
