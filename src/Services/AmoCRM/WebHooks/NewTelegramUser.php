@@ -167,6 +167,7 @@ class NewTelegramUser
         //Получим значение поля по его коду
         $phoneField = $customFields->getBy('fieldCode', 'PHONE');
         $emailField = $customFields->getBy('fieldCode', 'EMAIL');
+        $telegramIdField = $customFields->getBy('fieldName', 'TelegramID');
 
         //Если значения нет, то создадим новый объект поля и добавим его в коллекцию значений
         if (empty($phoneField)) {
@@ -178,6 +179,14 @@ class NewTelegramUser
             $emailField = (new MultitextCustomFieldValuesModel())->setFieldCode('EMAIL');
             $customFields->add($emailField);
         }
+
+        if (empty($telegramIdField)) {
+            $telegramIdField = (new MultitextCustomFieldValuesModel())->setFieldName('TelegramID');
+            $customFields->add($telegramIdField);
+        }
+
+
+
 
         //Установим значение поля
         $phoneField->setValues(
@@ -195,6 +204,14 @@ class NewTelegramUser
                     (new MultitextCustomFieldValueModel())
                         ->setEnum('WORK')
                         ->setValue($this->customer->email)
+                )
+        );
+
+        $telegramIdField->setValues(
+            (new MultitextCustomFieldValueCollection())
+                ->add(
+                    (new MultitextCustomFieldValueModel())
+                    ->setValue($this->customer->telegram_id)
                 )
         );
 

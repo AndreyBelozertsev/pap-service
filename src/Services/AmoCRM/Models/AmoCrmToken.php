@@ -13,7 +13,8 @@ class AmoCrmToken extends Model
         'expires_in',
         'access_token',
         'refresh_token',
-        'base_domain'
+        'base_domain',
+        'source',
     ];
 
     public function integration()

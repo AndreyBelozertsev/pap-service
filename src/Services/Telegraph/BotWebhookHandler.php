@@ -123,6 +123,12 @@ class BotWebhookHandler extends WebhookHandler
 
     protected function setClient()
     {
+        $message = Str::of($this->message?->text() ?? '');
+        $source = null;
+        if($message->contains(config('constant.telegram_source_expression'))){
+            $source = (string) trim($message->after(config('constant.telegram_source_expression')) ?? '');
+        }
+
         $this->chat->client()->updateOrCreate([
             'telegraph_chat_id' => $this->chat->id
             ],
@@ -131,6 +137,7 @@ class BotWebhookHandler extends WebhookHandler
                 'username' => $this->message->from()->username(),
                 'first_name' => $this->message->from()->firstName(),
                 'last_name' => $this->message->from()->lastName(),
+                'source' => $source,
             ]
         );
     }
