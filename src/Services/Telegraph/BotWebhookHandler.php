@@ -59,7 +59,7 @@ class BotWebhookHandler extends WebhookHandler
                 })->first();
 
         if(!$telegraphChat || !($chat_id == config('constant.telegram_group_id'))){
-            return;
+            return true;
         }
 
         TelegraphCustomFacade::approveChatJoin( $chat_id, $user_id )->send();
