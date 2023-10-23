@@ -16,7 +16,9 @@ use AmoCRM\Collections\LinksCollection;
 use AmoCRM\Helpers\EntityTypesInterface;
 use AmoCRM\Exceptions\AmoCRMApiException;
 use AmoCRM\Collections\CustomFieldsValuesCollection;
+use AmoCRM\Models\CustomFieldsValues\TextCustomFieldValuesModel;
 use AmoCRM\Models\CustomFieldsValues\MultitextCustomFieldValuesModel;
+use AmoCRM\Models\CustomFieldsValues\ValueModels\TextCustomFieldValueModel;
 use AmoCRM\Models\CustomFieldsValues\ValueModels\MultitextCustomFieldValueModel;
 use AmoCRM\Models\CustomFieldsValues\ValueCollections\MultitextCustomFieldValueCollection;
 
@@ -160,6 +162,7 @@ class NewTelegramUser
     {
         //Получим коллекцию значений полей контакта
         $customFields = $contact->getCustomFieldsValues();
+   
         if(!$customFields){
             $this->setContactInfo($contact);  
             return;
@@ -167,7 +170,7 @@ class NewTelegramUser
         //Получим значение поля по его коду
         $phoneField = $customFields->getBy('fieldCode', 'PHONE');
         $emailField = $customFields->getBy('fieldCode', 'EMAIL');
-        $telegramIdField = $customFields->getBy('fieldName', 'TelegramID');
+        $telegramIdField = $customFields->getBy('fieldId', config('constant.amo_crm_telegram_id_field_id'));
 
         //Если значения нет, то создадим новый объект поля и добавим его в коллекцию значений
         if (empty($phoneField)) {
@@ -181,11 +184,9 @@ class NewTelegramUser
         }
 
         if (empty($telegramIdField)) {
-            $telegramIdField = (new MultitextCustomFieldValuesModel())->setFieldName('TelegramID');
+            $telegramIdField = (new TextCustomFieldValuesModel())->setFieldId(config('constant.amo_crm_telegram_id_field_id'));
             $customFields->add($telegramIdField);
         }
-
-
 
 
         //Установим значение поля
@@ -208,9 +209,9 @@ class NewTelegramUser
         );
 
         $telegramIdField->setValues(
-            (new MultitextCustomFieldValueCollection())
+            (new TextCustomFieldValueCollection())
                 ->add(
-                    (new MultitextCustomFieldValueModel())
+                    (new TextCustomFieldValueModel())
                     ->setValue($this->customer->telegram_id)
                 )
         );
@@ -233,7 +234,7 @@ class NewTelegramUser
 
         $phoneField = (new MultitextCustomFieldValuesModel())->setFieldCode('PHONE');
         $emailField = (new MultitextCustomFieldValuesModel())->setFieldCode('EMAIL');
-        $telegramIdField = (new MultitextCustomFieldValuesModel())->setFieldName('TelegramID');
+        $telegramIdField = (new TextCustomFieldValuesModel())->setFieldID(config('constant.amo_crm_telegram_id_field_id'));
 
         $phoneCustomFieldValueCollection = new MultitextCustomFieldValueCollection();
         $emailFieldValueCollection = new MultitextCustomFieldValueCollection();
@@ -247,7 +248,7 @@ class NewTelegramUser
         $emailCustomFieldModel->setValue($this->customer->email)->setEnum('WORK');
         $emailFieldValueCollection->add($emailCustomFieldModel);
 
-        $telegramIdCustomFieldModel = new MultitextCustomFieldValueModel();
+        $telegramIdCustomFieldModel = new TextCustomFieldValueModel();
         $telegramIdCustomFieldModel->setValue($this->customer->telegram_id);
         $telegramIdFieldValueCollection->add($telegramIdCustomFieldModel);
 
@@ -255,15 +256,15 @@ class NewTelegramUser
         $emailField->setValues($emailFieldValueCollection);
         $telegramIdField->setValues($telegramIdFieldValueCollection);
         $customFieldsValuesCollection->add($phoneField)->add($emailField)->add($telegramIdField);
-
+       
         $contact->setCustomFieldsValues($customFieldsValuesCollection);
-
+        
         try {
             $this->getAmoClient()->contacts()->updateOne($contact);
         } catch (AmoCRMApiException $e) {
             Log::build(['driver' => 'single', 'path' => storage_path('logs/amoCRM-webhook.log')])->debug($e);
         }
-    
+
     }
 
     protected function getLead($contact)

@@ -9,4 +9,5 @@ return [
     'amo_crm_pipeline_id' => 7326902,
     'amo_crm_lead_status' => 60994990,
     'amo_crm_lead_status_sort' => 40,
+    'amo_crm_telegram_id_field_id' => 582701,
 ];
