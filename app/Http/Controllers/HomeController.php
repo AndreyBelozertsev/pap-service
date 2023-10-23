@@ -11,10 +11,6 @@ class HomeController extends Controller
 {
     public function index(Request $request)
     {
-        $client = Client::first();
-        $hook = new NewTelegramUser($client);
-
-        $hook->index();
         return view('welcome');
     }
 }
