@@ -215,6 +215,11 @@ class NewTelegramUser
                 )
         );
 
+
+        $customFields->add($phoneField)->add($emailField)->add($telegramIdField);
+
+        $contact->setCustomFieldsValues($customFields);
+
         try {
             $this->getAmoClient()->contacts()->updateOne($contact);
         } catch (AmoCRMApiException $e) {
