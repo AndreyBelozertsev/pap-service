@@ -64,12 +64,12 @@ class BotWebhookHandler extends WebhookHandler
             return;
         }
 
-        //TelegraphCustomFacade::approveChatJoin( $chat_id, $user_id )->send();
-        // $telegraphChat->html("Ваша заявка одобрена!"
-        // )->keyboard(function(Keyboard $keyboard) use($chatJoinQuery){
-        //     return $keyboard
-        //         ->button('В канал')->url(config('constant.telegram_group_link'));
-        // })->send();
+        TelegraphCustomFacade::approveChatJoin( $chat_id, $user_id )->send();
+        $telegraphChat->html("Ваша заявка одобрена!"
+        )->keyboard(function(Keyboard $keyboard) use($chatJoinQuery){
+            return $keyboard
+                ->button('В канал')->url(config('constant.telegram_group_link'));
+        })->send();
   
         //do webHook to AmoCRM
         AmoSendClientInfo::dispatch($telegraphChat->client);
