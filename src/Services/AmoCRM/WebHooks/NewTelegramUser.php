@@ -160,10 +160,10 @@ class NewTelegramUser
     {
         //Получим коллекцию значений полей контакта
         $customFields = $contact->getCustomFieldsValues();
-        if(!$customFields){
-            $this->setContactInfo($contact, $this->customer->email);  
-            return;
-        }
+        // if(!$customFields){
+        //     $this->setContactInfo($contact, $this->customer->email);  
+        //     return;
+        // }
         //Получим значение поля по его коду
         $phoneField = $customFields->getBy('fieldCode', 'PHONE');
         $emailField = $customFields->getBy('fieldCode', 'EMAIL');
