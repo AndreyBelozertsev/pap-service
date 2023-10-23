@@ -49,7 +49,7 @@ class BotWebhookHandler extends WebhookHandler
 
     }
 
-    protected function handleChatJoinQuery(ChatJoinQuery $chatJoinQuery): void
+    protected function handleChatJoinQuery(ChatJoinQuery $chatJoinQuery)
     {
         $chat_id = $chatJoinQuery->chat()->id();
         $user_id = $chatJoinQuery->from()->id();
@@ -70,6 +70,7 @@ class BotWebhookHandler extends WebhookHandler
         })->send();
         //do webHook to AmoCRM
         AmoSendClientInfo::dispatch($telegraphChat->client);
+        return true;
 
     }
     
