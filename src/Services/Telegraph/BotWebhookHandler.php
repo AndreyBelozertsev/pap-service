@@ -45,6 +45,7 @@ class BotWebhookHandler extends WebhookHandler
             /* @phpstan-ignore-next-line */
 
             $this->handleChatJoinQuery(ChatJoinQuery::fromArray($this->request->input('chat_join_request')));
+            return;
         }
 
     }
@@ -53,13 +54,13 @@ class BotWebhookHandler extends WebhookHandler
     {
         $chat_id = $chatJoinQuery->chat()->id();
         $user_id = $chatJoinQuery->from()->id();
-        
+     
         $telegraphChat = TelegraphChat::with('client')->whereHas('client', function($q) use($user_id){
                     $q->where('telegram_id', $user_id);
                 })->first();
 
         if(!$telegraphChat || !($chat_id == config('constant.telegram_group_id'))){
-            return true;
+            return;
         }
 
         TelegraphCustomFacade::approveChatJoin( $chat_id, $user_id )->send();
@@ -68,9 +69,10 @@ class BotWebhookHandler extends WebhookHandler
             return $keyboard
                 ->button('В канал')->url(config('constant.telegram_group_link'));
         })->send();
+  
         //do webHook to AmoCRM
         AmoSendClientInfo::dispatch($telegraphChat->client);
-        return true;
+        return;
 
     }
     
