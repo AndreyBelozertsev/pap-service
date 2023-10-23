@@ -116,7 +116,7 @@ class BotWebhookHandler extends WebhookHandler
 
     protected function handleChatMessage(Stringable $text): void
     {
-        if ( isset ( $this->queryClients[$this->message->replyToMessage()->text()] ) ){
+        if (  $this->message->replyToMessage()->text() !== null  && isset ( $this->queryClients[$this->message->replyToMessage()->text()] ) ){
             $this->{$this->queryClients[$this->message->replyToMessage()->text()]}();
         }
     }
