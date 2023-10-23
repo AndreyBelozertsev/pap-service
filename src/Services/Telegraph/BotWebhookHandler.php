@@ -38,20 +38,21 @@ class BotWebhookHandler extends WebhookHandler
 
     public function handle(Request $request, \DefStudio\Telegraph\Models\TelegraphBot $bot): void
     {
-        Log::debug($request);
+        Log::build(['path' => storage_path('logs/telegram-webhook.log')])->info($request);
         parent::handle($request, $bot);
 
         if ($this->request->has('chat_join_request')) {
             /* @phpstan-ignore-next-line */
 
             $this->handleChatJoinQuery(ChatJoinQuery::fromArray($this->request->input('chat_join_request')));
-            return;
+            
         }
 
     }
 
     protected function handleChatJoinQuery(ChatJoinQuery $chatJoinQuery)
     {
+ 
         $chat_id = $chatJoinQuery->chat()->id();
         $user_id = $chatJoinQuery->from()->id();
      
