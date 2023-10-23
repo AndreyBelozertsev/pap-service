@@ -160,10 +160,10 @@ class NewTelegramUser
     {
         //Получим коллекцию значений полей контакта
         $customFields = $contact->getCustomFieldsValues();
-        // if(!$customFields){
-        //     $this->setContactInfo($contact, $this->customer->email);  
-        //     return;
-        // }
+        if(!$customFields){
+            $this->setContactInfo($contact);  
+            return;
+        }
         //Получим значение поля по его коду
         $phoneField = $customFields->getBy('fieldCode', 'PHONE');
         $emailField = $customFields->getBy('fieldCode', 'EMAIL');
@@ -228,9 +228,11 @@ class NewTelegramUser
 
         $phoneField = (new MultitextCustomFieldValuesModel())->setFieldCode('PHONE');
         $emailField = (new MultitextCustomFieldValuesModel())->setFieldCode('EMAIL');
+        $telegramIdField = (new MultitextCustomFieldValuesModel())->setFieldName('TelegramID');
 
         $phoneCustomFieldValueCollection = new MultitextCustomFieldValueCollection();
         $emailFieldValueCollection = new MultitextCustomFieldValueCollection();
+        $telegramIdFieldValueCollection = new MultitextCustomFieldValueCollection();
 
         $phoneCustomFieldModel = new MultitextCustomFieldValueModel();
         $phoneCustomFieldModel->setValue($this->customer->phone)->setEnum('WORK');
@@ -240,9 +242,14 @@ class NewTelegramUser
         $emailCustomFieldModel->setValue($this->customer->email)->setEnum('WORK');
         $emailFieldValueCollection->add($emailCustomFieldModel);
 
+        $telegramIdCustomFieldModel = new MultitextCustomFieldValueModel();
+        $telegramIdCustomFieldModel->setValue($this->customer->telegram_id);
+        $telegramIdFieldValueCollection->add($telegramIdCustomFieldModel);
+
         $phoneField->setValues($phoneCustomFieldValueCollection);
         $emailField->setValues($emailFieldValueCollection);
-        $customFieldsValuesCollection->add($phoneField)->add($emailField);
+        $telegramIdField->setValues($telegramIdFieldValueCollection);
+        $customFieldsValuesCollection->add($phoneField)->add($emailField)->add($telegramIdField);
 
         $contact->setCustomFieldsValues($customFieldsValuesCollection);
 
