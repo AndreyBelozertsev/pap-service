@@ -57,7 +57,7 @@ class NewTelegramUser
         try {
             return $this->getAmoClient()->tags('leads')->get($tagfilter)->first(); 
         } catch (AmoCRMApiException $e) {
-            Log::debug($e);
+            Log::build(['driver' => 'single', 'path' => storage_path('logs/amoCRM-webhook.log')])->debug($e);
         }
         return $this->createLeadTag();
     }
@@ -73,7 +73,7 @@ class NewTelegramUser
         try {
             $tagsService->add($tagsCollection);
         } catch (AmoCRMApiException $e) {
-            Log::debug($e);
+            Log::build(['driver' => 'single', 'path' => storage_path('logs/amoCRM-webhook.log')])->debug($e);
         }
 
         return $tag;
@@ -88,7 +88,7 @@ class NewTelegramUser
         try {
             return $this->getAmoClient()->tags('contacts')->get($tagfilter)->first(); 
         } catch (AmoCRMApiException $e) {
-            Log::debug($e);
+            Log::build(['driver' => 'single', 'path' => storage_path('logs/amoCRM-webhook.log')])->debug($e);
         }
         return $this->createContactTag();
     }
@@ -105,7 +105,7 @@ class NewTelegramUser
         try {
             $tagsService->add($tagsCollection);
         } catch (AmoCRMApiException $e) {
-            Log::debug($e);
+            Log::build(['driver' => 'single', 'path' => storage_path('logs/amoCRM-webhook.log')])->debug($e);
         }
 
         return $tag;
@@ -119,7 +119,7 @@ class NewTelegramUser
         try {
             $contact = $this->getAmoClient()->contacts()->get($contactFilter)->first();
         } catch (AmoCRMApiException $e) {
-            Log::debug($e);
+            Log::build(['driver' => 'single', 'path' => storage_path('logs/amoCRM-webhook.log')])->debug($e);
         }
 
         if(!isset($contact)){
@@ -127,7 +127,7 @@ class NewTelegramUser
             try {
                 $contact = $this->getAmoClient()->contacts()->get($contactFilter)->first(); 
             } catch (AmoCRMApiException $e) {
-                Log::debug($e);
+                Log::build(['driver' => 'single', 'path' => storage_path('logs/amoCRM-webhook.log')])->debug($e);
             }
         }
 
@@ -148,7 +148,7 @@ class NewTelegramUser
             $contact = $this->getAmoClient()->contacts()->addOne($contactModel);
             $this->setContactTag($contact);
         } catch (AmoCRMApiException $e) {
-            Log::debug($e);
+            Log::build(['driver' => 'single', 'path' => storage_path('logs/amoCRM-webhook.log')])->debug($e);
         }
         if(isset($contact)){
             return $contact;
@@ -218,7 +218,7 @@ class NewTelegramUser
         try {
             $this->getAmoClient()->contacts()->updateOne($contact);
         } catch (AmoCRMApiException $e) {
-            Log::debug($e);
+            Log::build(['driver' => 'single', 'path' => storage_path('logs/amoCRM-webhook.log')])->debug($e);
         }   
     }
 
@@ -249,7 +249,7 @@ class NewTelegramUser
         try {
             $this->getAmoClient()->contacts()->updateOne($contact);
         } catch (AmoCRMApiException $e) {
-            Log::debug($e);
+            Log::build(['driver' => 'single', 'path' => storage_path('logs/amoCRM-webhook.log')])->debug($e);
         }
     
     }
@@ -263,7 +263,7 @@ class NewTelegramUser
         try {
             $leads = $this->getAmoClient()->leads()->get($leadFilter,['tags']); 
         } catch (AmoCRMApiException $e) {
-            Log::debug($e);
+            Log::build(['driver' => 'single', 'path' => storage_path('logs/amoCRM-webhook.log')])->debug($e);
         }
         if(! isset($leads)){
             return $this->leadCreate($contact);
@@ -294,7 +294,7 @@ class NewTelegramUser
             $lead = $this->getAmoClient()->leads()->addOne($lead);
             $this->setLeadTag($lead);
         } catch (AmoCRMApiException $e) {
-            Log::debug($e);
+            Log::build(['driver' => 'single', 'path' => storage_path('logs/amoCRM-webhook.log')])->debug($e);
         }
 
         $links = new LinksCollection();
@@ -302,7 +302,7 @@ class NewTelegramUser
         try {
             $this->getAmoClient()->leads()->link($lead, $links);
         } catch (AmoCRMApiException $e) {
-            Log::debug($e);
+            Log::build(['driver' => 'single', 'path' => storage_path('logs/amoCRM-webhook.log')])->debug($e);
         }
 
         return $lead;
@@ -317,7 +317,7 @@ class NewTelegramUser
             try {
                 $this->getAmoClient()->leads()->updateOne($lead->setStatusId(config('constant.amo_crm_lead_status')));
             } catch (AmoCRMApiException $e) {
-                Log::debug($e);
+                Log::build(['driver' => 'single', 'path' => storage_path('logs/amoCRM-webhook.log')])->debug($e);
             } 
         }
     }
@@ -331,7 +331,7 @@ class NewTelegramUser
         try {
             $this->getAmoClient()->contacts()->updateOne($contact);
         } catch (AmoCRMApiException $e) {
-            Log::debug($e);
+            Log::build(['driver' => 'single', 'path' => storage_path('logs/amoCRM-webhook.log')])->debug($e);
         }
     }
 
@@ -344,7 +344,7 @@ class NewTelegramUser
         try {
             $this->getAmoClient()->leads()->updateOne($lead);
         } catch (AmoCRMApiException $e) {
-            Log::debug($e);
+            Log::build(['driver' => 'single', 'path' => storage_path('logs/amoCRM-webhook.log')])->debug($e);
         }  
     }
 
