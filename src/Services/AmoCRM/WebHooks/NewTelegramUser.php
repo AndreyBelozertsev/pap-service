@@ -71,7 +71,7 @@ class NewTelegramUser
         $tagsService = $this->getAmoClient()->tags(EntityTypesInterface::LEADS);
 
         try {
-            $tag = $tagsService->add($tagsCollection);
+            $tagsService->add($tagsCollection);
         } catch (AmoCRMApiException $e) {
             Log::debug($e);
         }
@@ -97,18 +97,18 @@ class NewTelegramUser
     {
         $tagsCollection = new TagsCollection();
         $tag = new TagModel();
-        $tag->setName('воронка веб');
+        $tag->setName(config('constant.amo_crm_contact_tag_name'));
         $tagsCollection->add($tag);
+
         $tagsService = $this->getAmoClient()->tags(EntityTypesInterface::CONTACTS);
 
         try {
-            $tag = $tagsService->add($tagsCollection);
+            $tagsService->add($tagsCollection);
         } catch (AmoCRMApiException $e) {
             Log::debug($e);
         }
 
         return $tag;
-    
     }
 
     protected function getContact()
