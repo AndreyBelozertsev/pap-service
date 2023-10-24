@@ -98,7 +98,7 @@ class BotWebhookHandler extends WebhookHandler
 
     public function info()
     {
-        $this->chat->photo('https://test.rakurs82.ru/public/storage/telegram/first_message.png')
+        $this->chat->photo('https://test.rakurs82.ru/public/storage/telegram/preview.png')
         ->html("Ты можешь <b>продавать фото и видео</b>, подписку на свой канал, или <b>монетизировать стримы</b> в реальном времени. 
         \nНачать просто — тебе нужен только <b>криптокошелек</b>. 
         \nГотов стать частью этого захватывающего путешествия? <b>Напиши свое имя, email и номер телефона</b> для регистрации, и мы предоставим тебе доступ к нашему закрытому телеграм-каналу. 
