@@ -115,7 +115,7 @@ class BotWebhookHandler extends WebhookHandler
             ->send();
     }
 
-    protected function getAgree()
+    public function getAgree()
     {
         $this->chat->html("📝 Для продолжения, пожалуйста, подтверди свое согласие на обработку персональных данных. Мы уважаем твою конфиденциальность и используем твои данные исключительно для создания лучшего опыта для тебя в рамках нашего сообщества. Подробнее о нашей <a href='https://papaya.land/documents/Papaya%20Privacy%20Policy.pdf'>политике конфиденциальности</a>.
             \nМы ценим твой выбор и готовы поддержать тебя на каждом этапе твоего пути! 🌿")
@@ -125,12 +125,25 @@ class BotWebhookHandler extends WebhookHandler
             ]))->send();
     }
 
-    protected function handleChatMessage(Stringable $text): void
+    public function handleChatMessage(Stringable $text): void
     {
         $reply = $this->message->replyToMessage();
         if ( $reply  && isset ( $this->queryClients[$this->message->replyToMessage()->text()] ) ){
             $this->{$this->queryClients[$this->message->replyToMessage()->text()]}();
         }
+    }
+
+    public function agree()
+    {
+        $this->nextAction();
+    }
+
+    public function disagree()
+    {
+        $this->chat->html("Жаль, что в этот раз Вы не смогли к нам присоединиться.\nМы будем рады видеть у нас вновь")
+        ->keyboard(Keyboard::make()->buttons([
+                Button::make('Проголосовать еще раз')->action('getAgree'),
+        ]))->send();
     }
 
     protected function setClient()
@@ -240,16 +253,5 @@ class BotWebhookHandler extends WebhookHandler
         $this->success();
     }
 
-    public function agree()
-    {
-        $this->nextAction();
-    }
 
-    public function disagree()
-    {
-        $this->chat->html("Жаль, что в этот раз Вы не смогли к нам присоединиться.\nМы будем рады видеть у нас вновь")
-        ->keyboard(Keyboard::make()->buttons([
-                Button::make('Проголосовать еще раз')->action('getAgree'),
-        ]))->send();
-    }
 }
