@@ -60,7 +60,10 @@ class BotWebhookHandler extends WebhookHandler
         $user_id = $chatJoinQuery->from()->id();
      
         $telegraphChat = TelegraphChat::with('client')->whereHas('client', function($q) use($user_id){
-                    $q->where('telegram_id', $user_id);
+                    $q->where('telegram_id', $user_id)
+                    ->where('name','!=', null)
+                    ->where('email', '!=', null)
+                    ->where('phone','!=', null);
                 })->first();
 
         if(!$telegraphChat || !($chat_id == config('constant.telegram_group_id'))){
