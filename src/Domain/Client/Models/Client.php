@@ -17,6 +17,8 @@ class Client extends Model
         'last_name',
         'mail',
         'phone',
+        'source',
+        'name',
         'telegraph_chat_id',
     ];
 
