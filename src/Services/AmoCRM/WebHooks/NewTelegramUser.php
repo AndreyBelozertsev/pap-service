@@ -145,7 +145,6 @@ class NewTelegramUser
     protected function contactCreate()
     {
         $contactModel = new ContactModel();
-        $contactModel->setName($this->generateContactName());
 
         try {
             $contact = $this->getAmoClient()->contacts()->addOne($contactModel);
@@ -161,7 +160,7 @@ class NewTelegramUser
 
     protected function updateContactInfo($contact)
     {
-     
+        $contact->setName($this->generateContactName());
         //Получим коллекцию значений полей контакта
         $customFields = $contact->getCustomFieldsValues();
 
@@ -354,6 +353,9 @@ class NewTelegramUser
 
     protected function generateContactName():string
     {
+        if($this->customer->name){
+            return $this->customer->name;
+        }
         if($this->customer->first_name || $this->customer->last_name ){
             return trim("{$this->customer->first_name} {$this->customer->last_name}");
         }
