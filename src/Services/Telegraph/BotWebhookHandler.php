@@ -88,10 +88,10 @@ class BotWebhookHandler extends WebhookHandler
         $this->chat->html("🌟 Привет! Добро пожаловать в мир <b>Papaya</b>! 🌟
         \nМы помогаем творцам <b>легко монетизировать контент</b> в любой точке мира, поддерживая вашу страсть к созданию и распространению уникального контента. 
         \nВсё это часть движения <b>Papaya</b> за экономическую свободу создателей! С помощью блокчейна, мы обеспечиваем <b>мгновенные выплаты с минимальными комиссиями</b>.
-        " . Storage::path('telegram/preview.png'))
+        ")
         ->send();
 
-        $this->chat->photo(Storage::path('telegram/preview.png'))->send();
+        $this->chat->photo('https://test.rakurs82.ru/public/storage/telegram/preview.png')->send();
 
         $this->chat->html("Ты можешь <b>продавать фото и видео</b>, подписку на свой канал, или <b>монетизировать стримы</b> в реальном времени. 
         \nНачать просто — тебе нужен только <b>криптокошелек</b>. 
@@ -102,15 +102,6 @@ class BotWebhookHandler extends WebhookHandler
         $this->getAgree();
     }
 
-
-
-    public function testHook(): void
-    {
-        $telegraphChat = TelegraphChat::where('chat_id', config('constant.telegram_group_id'))->first();
-
-        $this->chat->message(config('constant.telegram_group_link'))
-            ->send();
-    }
 
     public function success(): void
     {
@@ -249,12 +240,12 @@ class BotWebhookHandler extends WebhookHandler
         $this->success();
     }
 
-    protected function agree()
+    protected function handleAgree()
     {
         $this->nextAction();
     }
 
-    protected function disagree()
+    protected function handleDisagree()
     {
         $this->chat->html("Жаль, что в этот раз Вы не смогли к нам присоединиться.\nМы будем рады видеть у нас вновь")
         ->keyboard(Keyboard::make()->buttons([
