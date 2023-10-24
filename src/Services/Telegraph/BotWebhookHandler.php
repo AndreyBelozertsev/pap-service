@@ -240,12 +240,12 @@ class BotWebhookHandler extends WebhookHandler
         $this->success();
     }
 
-    public function handleAgree()
+    public function agree()
     {
         $this->nextAction();
     }
 
-    public function handleDisagree()
+    public function disagree()
     {
         $this->chat->html("Жаль, что в этот раз Вы не смогли к нам присоединиться.\nМы будем рады видеть у нас вновь")
         ->keyboard(Keyboard::make()->buttons([
