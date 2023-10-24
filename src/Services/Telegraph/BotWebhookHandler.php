@@ -9,6 +9,7 @@ use Domain\Client\Models\Client;
 use Illuminate\Support\Stringable;
 use Illuminate\Support\Facades\Log;
 use DefStudio\Telegraph\DTO\Message;
+use Illuminate\Support\Facades\Storage;
 use DefStudio\Telegraph\DTO\InlineQuery;
 use DefStudio\Telegraph\Keyboard\Button;
 use Services\Telegraph\DTO\ChatJoinQuery;
@@ -27,11 +28,13 @@ class BotWebhookHandler extends WebhookHandler
 {
 
     protected array $queryClients = [
+        'Введите ваше имя:' => 'setClientName',
         'Введите ваш email адрес:' => 'setClientEmail',
         'Введите ваш телефон:' => 'setClientPhone',
     ];  
 
     protected array $requireClientFields = [
+        'name' => 'getClientName',
         'email' => 'getClientEmail',
         'phone' => 'getClientPhone',
     ]; 
@@ -85,8 +88,10 @@ class BotWebhookHandler extends WebhookHandler
         $this->chat->html("🌟 Привет! Добро пожаловать в мир <b>Papaya</b>! 🌟
         \nМы помогаем творцам <b>легко монетизировать контент</b> в любой точке мира, поддерживая вашу страсть к созданию и распространению уникального контента. 
         \nВсё это часть движения <b>Papaya</b> за экономическую свободу создателей! С помощью блокчейна, мы обеспечиваем <b>мгновенные выплаты с минимальными комиссиями</b>.
-         ")
+        " . Storage::path('telegram/preview.png'))
         ->send();
+
+        $this->chat->photo(Storage::path('telegram/preview.png'))->send();
 
         $this->chat->html("Ты можешь <b>продавать фото и видео</b>, подписку на свой канал, или <b>монетизировать стримы</b> в реальном времени. 
         \nНачать просто — тебе нужен только <b>криптокошелек</b>. 
@@ -94,7 +99,7 @@ class BotWebhookHandler extends WebhookHandler
         \nТам начнется твое удивительное путешествие в мир <b>Papaya</b>! 🚀")
         ->send();
     
-        $this->nextAction();
+        $this->getAgree();
     }
 
 
@@ -102,11 +107,6 @@ class BotWebhookHandler extends WebhookHandler
     public function testHook(): void
     {
         $telegraphChat = TelegraphChat::where('chat_id', config('constant.telegram_group_id'))->first();
-
-        // $link = $telegraphChat->createInviteLink()    
-        //     ->withJoinRequest()      
-        //     ->send();
-        
 
         $this->chat->message(config('constant.telegram_group_link'))
             ->send();
@@ -116,12 +116,22 @@ class BotWebhookHandler extends WebhookHandler
     {
         $this->chat->html("Спасибо за регистрацию
             \nОтправляем Вам приглашение на закрытый канал, заявки принмаются автоматически!
-        ")
+            ")
             ->keyboard(function(Keyboard $keyboard){
                 return $keyboard
                     ->button('Перейти в канал')->url(config('constant.telegram_group_link'));
             })
             ->send();
+    }
+
+    protected function getAgree()
+    {
+        $this->chat->html("📝 Для продолжения, пожалуйста, подтверди свое согласие на обработку персональных данных. Мы уважаем твою конфиденциальность и используем твои данные исключительно для создания лучшего опыта для тебя в рамках нашего сообщества. Подробнее о нашей <a href='https://papaya.land/documents/Papaya%20Privacy%20Policy.pdf'>политике конфиденциальности</a>.
+            \nМы ценим твой выбор и готовы поддержать тебя на каждом этапе твоего пути! 🌿")
+            ->keyboard(Keyboard::make()->buttons([
+                    Button::make('✅ Согласен')->action('agree'),
+                    Button::make('❌ Не согласен')->action('disagree'),
+            ]))->send();
     }
 
     protected function handleChatMessage(Stringable $text): void
@@ -151,6 +161,31 @@ class BotWebhookHandler extends WebhookHandler
                 'source' => $source,
             ]
         );
+    }
+
+    public function setClientName(): void
+    {
+        $this->message->text();
+        $validator = validator(
+            ['name'=>$this->message->text()],
+            ['name'=>'required']
+        );
+
+        if ($validator->fails()) {
+            $this->chat->message("Имя введено некорректно")->send();
+            $this->getClientName();
+            return;
+        }
+
+        $this->chat->client()->update(['name' => $this->message->text()]);
+
+        $this->nextAction();
+
+    }
+
+    public function getClientName(): void
+    {
+        $this->chat->message("Введите ваше имя:")->forceReply(placeholder: 'Введите имя')->send();
     }
 
     public function setClientEmail(): void
@@ -212,5 +247,18 @@ class BotWebhookHandler extends WebhookHandler
             }
         }
         $this->success();
+    }
+
+    protected function agree()
+    {
+        $this->nextAction();
+    }
+
+    protected function disagree()
+    {
+        $this->chat->html("Жаль, что в этот раз Вы не смогли к нам присоединиться.\nМы будем рады видеть у нас вновь")
+        ->keyboard(Keyboard::make()->buttons([
+                Button::make('Проголосовать еще раз')->action('getAgree'),
+        ]))->send();
     }
 }
