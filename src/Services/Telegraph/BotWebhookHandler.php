@@ -79,7 +79,7 @@ class BotWebhookHandler extends WebhookHandler
         return;
 
     }
-    
+
     public function start(): void
     {
 
@@ -100,19 +100,6 @@ class BotWebhookHandler extends WebhookHandler
         ->send();
     
         $this->getAgree();
-    }
-
-
-    public function success(): void
-    {
-        $this->chat->html("Спасибо за регистрацию
-            \nОтправляем Вам приглашение на закрытый канал, заявки принмаются автоматически!
-            ")
-            ->keyboard(function(Keyboard $keyboard){
-                return $keyboard
-                    ->button('Перейти в канал')->url(config('constant.telegram_group_link'));
-            })
-            ->send();
     }
 
     public function getAgree()
@@ -251,6 +238,18 @@ class BotWebhookHandler extends WebhookHandler
             }
         }
         $this->success();
+    }
+
+    public function success(): void
+    {
+        $this->chat->html("Спасибо за регистрацию
+            \nОтправляем Вам приглашение на закрытый канал, заявки принмаются автоматически!
+            ")
+            ->keyboard(function(Keyboard $keyboard){
+                return $keyboard
+                    ->button('Перейти в канал')->url(config('constant.telegram_group_link'));
+            })
+            ->send();
     }
 
 
