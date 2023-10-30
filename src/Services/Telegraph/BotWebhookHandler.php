@@ -116,7 +116,7 @@ class BotWebhookHandler extends WebhookHandler
 
     public function getAgree()
     {
-        $this->chat->html("📝 Заполняя контактную информацию Вы даете согласие на обработку персональных данных. Подробнее о нашей <a href='https://papaya.land/documents/Papaya%20Privacy%20Policy.pdf'>политике конфиденциальности</a>.")
+        $this->chat->html("📝 Заполняя контактную информацию ты даешь согласие на обработку персональных данных. Подробнее о нашей <a href='https://papaya.land/documents/Papaya%20Privacy%20Policy.pdf'>политике конфиденциальности</a>.")
             ->withData('disable_web_page_preview', true)
         ->send();
         $this->nextAction();
