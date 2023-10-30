@@ -116,13 +116,10 @@ class BotWebhookHandler extends WebhookHandler
 
     public function getAgree()
     {
-        $this->chat->html("📝 Для продолжения, пожалуйста, подтверди свое согласие на обработку персональных данных. Мы уважаем твою конфиденциальность и используем твои данные исключительно для создания лучшего опыта для тебя в рамках нашего сообщества. Подробнее о нашей <a href='https://papaya.land/documents/Papaya%20Privacy%20Policy.pdf'>политике конфиденциальности</a>.
-            \nМы ценим твой выбор и готовы поддержать тебя на каждом этапе твоего пути! 🌿")
+        $this->chat->html("📝 Заполняя контактную информацию Вы даете согласие на обработку персональных данных. Подробнее о нашей <a href='https://papaya.land/documents/Papaya%20Privacy%20Policy.pdf'>политике конфиденциальности</a>.")
             ->withData('disable_web_page_preview', true)
-            ->keyboard(Keyboard::make()->buttons([
-                    Button::make('✅ Согласен')->action('agree'),
-                    Button::make('❌ Не согласен')->action('disagree'),
-            ]))->send();
+        ->send();
+        $this->nextAction();
     }
 
     public function handleChatMessage(Stringable $text): void
@@ -133,18 +130,7 @@ class BotWebhookHandler extends WebhookHandler
         }
     }
 
-    public function agree()
-    {
-        $this->nextAction();
-    }
 
-    public function disagree()
-    {
-        $this->chat->html("Жаль, что в этот раз Вы не смогли к нам присоединиться.\nМы будем рады видеть у нас вновь")
-        ->keyboard(Keyboard::make()->buttons([
-                Button::make('Проголосовать еще раз')->action('getAgree'),
-        ]))->send();
-    }
 
     protected function setClient()
     {
