@@ -16,6 +16,8 @@ class AppRegistrar implements RouteRegistrar
     {
         Route::middleware('web')->group(function () {
             Route::get('/', [HomeController::class, 'index'])->name('home'); 
+
+            //Route::get('/getPipelines', [HomeController::class, 'getPipelines'])->name('getPipelines'); 
         });
 
         Route::match(['get', 'post'],'/amo/token', function (Request $request) {
