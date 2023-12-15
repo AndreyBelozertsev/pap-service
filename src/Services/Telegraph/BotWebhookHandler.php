@@ -139,7 +139,7 @@ class BotWebhookHandler extends WebhookHandler
         if($message->contains(config('constant.telegram_source_expression'))){
             $source = (string) trim($message->after(config('constant.telegram_source_expression')) ?? '');
         }
-        return true;
+
         $this->chat->client()->updateOrCreate([
             'telegraph_chat_id' => $this->chat->id
             ],
